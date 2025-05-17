@@ -8,29 +8,42 @@ To write a program to implement the K Means Clustering for Customer Segmentation
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1.Import dataset and print head,info of the dataset  
-2.check for null values   
-3.Import kmeans and fit it to the dataset    
-4.Plot the graph using elbow method    
-5.Print the predicted array    
-6.Plot the customer segments    
+1)Choose the number of clusters (K): 
+Decide how many clusters you want to identify in your data. This is a hyperparameter that you need to set in advance.
+
+2)Initialize cluster centroids: 
+Randomly select K data points from your dataset as the initial centroids of the clusters.
+
+3)Assign data points to clusters: 
+Calculate the distance between each data point and each centroid. Assign each data point to the cluster with the closest centroid. This step is typically  done using Euclidean distance, but other distance metrics can also be used.
+
+4)Update cluster centroids: 
+Recalculate the centroid of each cluster by taking the mean of all the data points assigned to that cluster.
+
+5)Repeat steps 3 and 4: 
+Iterate steps 3 and 4 until convergence. Convergence occurs when the assignments of data points to clusters no longer change or change very minimally.
+
+6)Evaluate the clustering results: 
+Once convergence is reached, evaluate the quality of the clustering results. This can be done using various metrics such as the within-cluster sum of squares (WCSS), silhouette coefficient, or domain-specific evaluation criteria.
+
+7)Select the best clustering solution: 
+If the evaluation metrics allow for it, you can compare the results of multiple clustering runs with different K values and select the one that best suits your requirements
+
 
 ## Program:
 ```
 /*
 Program to implement the K Means Clustering for Customer Segmentation.
-Developed by: RIHIK V
-RegisterNumber:  212223230171
+Developed by: ADARSH CHOWDARY R
+RegisterNumber: 212223040166
 */
 ```
+
 ```python
 
 import pandas as pd
-
 import matplotlib.pyplot as plt
-
-data=pd.read_csv("/content/Mall_Customers (1).csv")
-
+data = pd.read_csv("Mall_Customers.csv")
 data.head()
 
 data.info()
@@ -38,81 +51,76 @@ data.info()
 data.isnull().sum()
 
 from sklearn.cluster import KMeans
-
-wcss=[]
+wcss = []
 
 for i in range(1,11):
-
-kmeans=KMeans(n_clusters=i,init="k-means++")
-
-kmeans.fit(data.iloc[:,3:])
-
-wcss.append(kmeans.inertia_)
-
-plt.plot(range(1,11),wcss)
-
-plt.xlabel("No_of_Clusters")
-
+  kmeans = KMeans(n_clusters = i, init = "k-means++")
+  kmeans.fit(data.iloc[:, 3:])
+  wcss.append(kmeans.inertia_)
+  
+plt.plot(range(1, 11), wcss)
+plt.xlabel("No. of Clusters")
 plt.ylabel("wcss")
-
 plt.title("Elbow Method")
 
-km=KMeans(n_clusters=5)
+km = KMeans(n_clusters = 5)
+km.fit(data.iloc[:, 3:])
 
-km.fit(data.iloc[:,3:])
-
-y_pred=km.predict(data.iloc[:,3:])
-
+y_pred = km.predict(data.iloc[:, 3:])
 y_pred
 
-data["cluster"]=y_pred
-
-df0=data[data["cluster"]==0]
-
-df1=data[data["cluster"]==1]
-
-df2=data[data["cluster"]==2]
-
-df3=data[data["cluster"]==3]
-
-df4=data[data["cluster"]==4]
-
-plt.scatter(df0["Annual Income (k$)"],df0["Spending Score (1-100)"],c="red",label="cluster0")
-
-plt.scatter(df1["Annual Income (k$)"],df1["Spending Score (1-100)"],c="black",label="cluster1")
-
-plt.scatter(df2["Annual Income (k$)"],df2["Spending Score (1-100)"],c="blue",label="cluster2")
-
-plt.scatter(df3["Annual Income (k$)"],df3["Spending Score (1-100)"],c="green",label="cluster3")
-
-plt.scatter(df4["Annual Income (k$)"],df4["Spending Score (1-100)"],c="magenta",label="cluster4")
-
+data["cluster"] = y_pred
+df0 = data[data["cluster"] == 0]
+df1 = data[data["cluster"] == 1]
+df2 = data[data["cluster"] == 2]
+df3 = data[data["cluster"] == 3]
+df4 = data[data["cluster"] == 4]
+plt.scatter(df0["Annual Income (k$)"], df0["Spending Score (1-100)"], c = "red", label = "cluster0")
+plt.scatter(df1["Annual Income (k$)"], df1["Spending Score (1-100)"], c = "black", label = "cluster1")
+plt.scatter(df2["Annual Income (k$)"], df2["Spending Score (1-100)"], c = "blue", label = "cluster2")
+plt.scatter(df3["Annual Income (k$)"], df3["Spending Score (1-100)"], c = "green", label = "cluster3")
+plt.scatter(df4["Annual Income (k$)"], df4["Spending Score (1-100)"], c = "magenta", label = "cluster4")
 plt.legend()
-
-plt.title("Customer Segment")
-
+plt.title("Customer Segments")
 ```
 
 ## Output:
-### 1.DATA.HEAD():
-![image](https://github.com/user-attachments/assets/14e9fa29-4edd-48cc-aec1-891c6a6c97b1)
 
-### 2.DATA.INF0():
-![image](https://github.com/user-attachments/assets/0b29b4d5-bf35-4461-b045-c1451860597d)
+### data.head():
 
-### 3.DATA.ISNULL().SUM():
-![image](https://github.com/user-attachments/assets/d4332286-52a0-4ed4-be05-404628103a13)
+![image](https://github.com/user-attachments/assets/845cc9e0-610b-4306-9051-ed4653e5b256)
 
-### 4.PLOT USING ELBOW METHOD:
-![image](https://github.com/user-attachments/assets/fe097c7b-2ace-4c28-946c-570652e7214a)
 
-### 5.K-MEANS CLUSTERING:
-![image](https://github.com/user-attachments/assets/9bf8767d-f46b-47cb-99a4-3b7e1a0316ae)
+### data.info():
 
-### 5.K-MEANS CLUSTERING:
-![image](https://github.com/user-attachments/assets/4f6c2957-6d85-4ae6-abb5-202a339a6230)
-### 7.CUSTOMER SEGMENT:
-![image](https://github.com/user-attachments/assets/6e651abc-1085-4ae7-bbe9-614a3b3dff7a)
+![image](https://github.com/user-attachments/assets/65383537-0ac6-4170-942b-2b2ca648d2ef)
+
+
+### NULL VALUES:
+
+![image](https://github.com/user-attachments/assets/1b62501f-8c4b-4b86-b103-9bda9fb34f83)
+
+
+
+### ELBOW GRAPH:
+
+![image](https://github.com/user-attachments/assets/bc7cd5fd-5ca4-4ea5-8c8c-e6da8b70a15f)
+
+
+### CLUSTER FORMATION:
+
+![image](https://github.com/user-attachments/assets/4991a675-ae76-4526-bfd5-50fab1a3a86c)
+
+
+### PREDICICTED VALUE:
+
+![image](https://github.com/user-attachments/assets/7e2270a7-bb7c-4c7b-9fc1-ff0666ca2684)
+
+
+### FINAL GRAPH(D/O):
+
+![image](https://github.com/user-attachments/assets/c8f7a335-2c85-4e47-b8ac-170b010cc4b4)
+
 
 ## Result:
 Thus the program to implement the K Means Clustering for Customer Segmentation is written and verified using python programming.
